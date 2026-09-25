@@ -1,0 +1,6 @@
+# Student Record Manager relies 100% on the Python Standard Library (Python 3.10+)
+# No external third-party packages are required to run this core system.
+#
+# Optional development dependencies:
+# pytest>=8.0.0
+# flake8>=7.0.0

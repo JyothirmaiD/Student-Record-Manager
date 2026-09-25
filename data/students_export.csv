@@ -1,0 +1,6 @@
+student_id,name,email,age,course,gpa,created_at
+STU-1001,Alex Rivera,alex.rivera@university.edu,21,Computer Science,3.85,2026-09-20T10:15:00+00:00
+STU-1002,Sophia Chen,sophia.chen@engineering.org,22,Electrical Engineering,3.92,2026-09-21T11:30:00+00:00
+STU-1003,Marcus Johnson,marcus.j@biotech.ac.uk,20,Bioinformatics,3.65,2026-09-22T09:45:00+00:00
+STU-1004,Emily Watson,emily.watson@dataanalytics.io,23,Data Science,3.78,2026-09-23T14:20:00+00:00
+STU-1005,David Miller,david.miller@physics.edu,21,Physics,3.7,2026-09-25T17:16:53.054944+00:00
