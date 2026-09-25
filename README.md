@@ -3,9 +3,12 @@
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-29%20passed-brightgreen.svg)](tests/)
+[![Documentation](https://img.shields.io/badge/Documentation-PDF-red.svg)](StudentRecordManager_Project_Report.pdf)
 [![Dependencies](https://img.shields.io/badge/dependencies-standard%20library-brightgreen.svg)](#requirements)
 
 A Python application for managing student academic records. Built with modular software design principles, featuring **Regex-based email validation**, **atomic file persistence**, a **custom exception hierarchy**, and an **interactive CLI**.
+
+📄 **[Download the Complete Project Report & Documentation (PDF)](StudentRecordManager_Project_Report.pdf)**
 
 ---
 

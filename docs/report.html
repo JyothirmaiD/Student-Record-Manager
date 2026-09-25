@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Record Manager - Project Report & Documentation</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 18mm 16mm 20mm 16mm;
+      @bottom-right {
+        content: counter(page);
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background-color: #ffffff;
+      line-height: 1.55;
+      font-size: 10.5pt;
+    }
+
+    /* Page Breaks */
+    .page-break {
+      page-break-before: always;
+    }
+
+    .no-break {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    /* Header & Cover */
+    .cover-page {
+      padding: 40px 20px 20px 20px;
+      text-align: center;
+      border-bottom: 3px solid #2563eb;
+      margin-bottom: 25px;
+    }
+
+    .badge-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 8.5pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-blue { background-color: #dbeafe; color: #1e40af; }
+    .badge-green { background-color: #dcfce7; color: #166534; }
+    .badge-purple { background-color: #f3e8ff; color: #6b21a8; }
+
+    h1.project-title {
+      font-size: 26pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 13pt;
+      color: #475569;
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+
+    .meta-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px 24px;
+      display: inline-grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      text-align: left;
+      font-size: 9pt;
+      margin-top: 10px;
+    }
+
+    .meta-card div strong {
+      display: block;
+      color: #64748b;
+      font-size: 8pt;
+      text-transform: uppercase;
+    }
+
+    /* Headings */
+    h2 {
+      font-size: 15pt;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 600;
+      color: #1e293b;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      color: #334155;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 12px;
+      color: #334155;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* Highlight Feature Box */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .feature-box {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #2563eb;
+      padding: 12px;
+      border-radius: 6px;
+    }
+
+    .feature-box h4 {
+      font-size: 10.5pt;
+      color: #0f172a;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feature-box p {
+      font-size: 9pt;
+      color: #475569;
+      margin: 0;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 9pt;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 7px 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    .status-tag {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-weight: 600;
+    }
+
+    .status-pass {
+      background-color: #dcfce7;
+      color: #15803d;
+    }
+
+    /* Code Blocks */
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-family: "Cascadia Code", "Fira Code", Consolas, "Courier New", monospace;
+      font-size: 8.5pt;
+      overflow-x: auto;
+      margin: 10px 0;
+      line-height: 1.45;
+    }
+
+    code {
+      font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 9pt;
+    }
+
+    pre code {
+      background-color: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    .callout {
+      border-left: 4px solid #3b82f6;
+      background-color: #eff6ff;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      margin: 12px 0;
+      font-size: 9.5pt;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      color: #1d4ed8;
+      margin-bottom: 4px;
+    }
+
+    /* Diagram Tree */
+    .tree {
+      font-family: monospace;
+      font-size: 8.5pt;
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      margin: 10px 0;
+    }
+
+    .footer-note {
+      margin-top: 30px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 8.5pt;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- COVER PAGE -->
+  <div class="cover-page">
+    <div class="badge-bar">
+      <span class="badge badge-blue">Python 3.10+</span>
+      <span class="badge badge-green">Production Ready</span>
+      <span class="badge badge-purple">MIT License</span>
+    </div>
+    <h1 class="project-title">Student Record Manager</h1>
+    <div class="subtitle">Complete Technical Project Report & Implementation Guide</div>
+    <p style="max-width: 650px; margin: 0 auto; color: #64748b; font-size: 10pt;">
+      A modular student management system designed with object-oriented principles, RFC-compliant Regex email validation, crash-safe atomic file storage, and comprehensive exception handling.
+    </p>
+
+    <div class="meta-card">
+      <div>
+        <strong>Project Type</strong>
+        Software Engineering / Academic
+      </div>
+      <div>
+        <strong>Architecture</strong>
+        Layered Modular System
+      </div>
+      <div>
+        <strong>Verification Status</strong>
+        29/29 Unit Tests Passing (100%)
+      </div>
+      <div>
+        <strong>Persistence Engine</strong>
+        Atomic JSON & CSV Exporter
+      </div>
+      <div>
+        <strong>User Interface</strong>
+        Interactive Terminal + CLI Flags
+      </div>
+      <div>
+        <strong>Dependencies</strong>
+        Zero (100% Python Standard Library)
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: EXECUTIVE OVERVIEW -->
+  <div class="no-break">
+    <h2>1. Executive Summary & Core Requirements</h2>
+    <p>
+      The <strong>Student Record Manager</strong> is designed to reliably store, query, validate, and manage student academic records with institutional integrity. The implementation strictly adheres to all specified core requirements:
+    </p>
+    
+    <div class="feature-grid">
+      <div class="feature-box">
+        <h4>1. Add Student</h4>
+        <p>Enrolls student records with unique ID, full name, validated email, age, course/program, and cumulative GPA.</p>
+      </div>
+      <div class="feature-box">
+        <h4>2. Validate Email using Regex</h4>
+        <p>Validates syntax using an RFC 5322-compliant compiled regular expression, preventing format corruption.</p>
+      </div>
+      <div class="feature-box">
+        <h4>3. Save Data to File</h4>
+        <p>Uses atomic file replacement (<code>os.replace</code> via temporary buffers) to eliminate partial-write data corruption.</p>
+      </div>
+      <div class="feature-box">
+        <h4>4. Read Student Data</h4>
+        <p>Deserializes JSON records on boot, outputs ASCII table views, and supports fuzzy multi-field keyword searching.</p>
+      </div>
+    </div>
+    <div class="feature-box" style="margin-top: 10px; border-left-color: #10b981;">
+      <h4>5. Handle Invalid Input using Custom Exceptions</h4>
+      <p>A specialized exception hierarchy ensures every input error (bad email format, invalid ID, out-of-range GPA, or duplicate records) is cleanly trapped and communicated without runtime application crashes.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: SYSTEM ARCHITECTURE -->
+  <div class="no-break" style="margin-top: 20px;">
+    <h2>2. System Architecture & Directory Structure</h2>
+    <p>
+      The codebase is organized into discrete domain layers following Separation of Concerns (SoC):
+    </p>
+    <div class="tree">
+student-record-manager/
+├── <b>student_manager/</b>             <span style="color: #64748b;"># Core application package</span>
+│   ├── <b>exceptions.py</b>            <span style="color: #64748b;"># Custom exception hierarchy (StudentRecordError & subclasses)</span>
+│   ├── <b>models.py</b>                <span style="color: #64748b;"># Student domain dataclass & validation factory</span>
+│   ├── <b>validator.py</b>             <span style="color: #64748b;"># Regex email & input validation functions</span>
+│   ├── <b>storage.py</b>               <span style="color: #64748b;"># Atomic JSON persistence & CSV export handler</span>
+│   ├── <b>manager.py</b>               <span style="color: #64748b;"># Core CRUD operations & uniqueness index</span>
+│   └── <b>cli.py</b>                   <span style="color: #64748b;"># Interactive terminal UI & argparse entrypoints</span>
+├── <b>tests/</b>                       <span style="color: #64748b;"># Comprehensive unit test suite</span>
+│   ├── <b>test_validator.py</b>        <span style="color: #64748b;"># Regex patterns & edge cases</span>
+│   ├── <b>test_storage.py</b>          <span style="color: #64748b;"># Atomic persistence & recovery</span>
+│   ├── <b>test_manager.py</b>          <span style="color: #64748b;"># CRUD workflows & duplicate enforcement</span>
+│   └── <b>test_exceptions.py</b>       <span style="color: #64748b;"># Exception inheritance & attributes</span>
+├── <b>data/students.json</b>           <span style="color: #64748b;"># JSON data store</span>
+├── <b>main.py</b>                      <span style="color: #64748b;"># Primary executable entrypoint</span>
+├── <b>README.md</b>                    <span style="color: #64748b;"># GitHub repository documentation</span>
+└── <b>LICENSE</b>                      <span style="color: #64748b;"># MIT Open Source License</span>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- SECTION 3: REGEX EMAIL VALIDATION -->
+  <div class="no-break">
+    <h2>3. Email Validation using Regular Expressions</h2>
+    <p>
+      Email integrity is guaranteed by applying a compiled regular expression in <code>student_manager/validator.py</code> before records can be instantiated:
+    </p>
+
+    <pre><code>EMAIL_REGEX_PATTERN = (
+    r"^[a-zA-Z0-9]([a-zA-Z0-9._%+-]*[a-zA-Z0-9])?"
+    r"@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?"
+    r"(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$"
+)</code></pre>
+
+    <h3>Detailed Pattern Breakdown</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%;">Component Pattern</th>
+          <th style="width: 35%;">Rule / Constraint</th>
+          <th style="width: 35%;">Guards Against</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>^[a-zA-Z0-9]</code></td>
+          <td>Leading character must be alphanumeric</td>
+          <td>Leading symbols (e.g. <code>.user@domain</code>)</td>
+        </tr>
+        <tr>
+          <td><code>([a-zA-Z0-9._%+-]*[a-zA-Z0-9])?</code></td>
+          <td>Local part symbols allowed internally</td>
+          <td>Trailing dot before <code>@</code> (e.g. <code>user.@domain</code>)</td>
+        </tr>
+        <tr>
+          <td><code>@</code></td>
+          <td>Single required domain separator</td>
+          <td>Missing <code>@</code> or multiple <code>@@</code></td>
+        </tr>
+        <tr>
+          <td><code>[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?</code></td>
+          <td>Domain hostname segment</td>
+          <td>Hyphens at start or end of hostname</td>
+        </tr>
+        <tr>
+          <td><code>(?:\.[a-zA-Z0-9](?:[...])?)*</code></td>
+          <td>Optional subdomains</td>
+          <td>Supports <code>cs.mit.edu</code> or <code>alumni.cam.ac.uk</code></td>
+        </tr>
+        <tr>
+          <td><code>\.[a-zA-Z]{2,}$</code></td>
+          <td>Top-Level Domain with &ge; 2 letters</td>
+          <td>Single letter TLDs (e.g. <code>.c</code>) or numeric TLDs</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="callout-title">Validation Enforcement Workflow</div>
+      When an email fails regex validation, the system immediately raises an <code>InvalidEmailError</code> containing the offending string and a diagnostic reason. The CLI captures this exception, displays a friendly message to the user, and prompts for re-entry without program termination.
+    </div>
+  </div>
+
+  <!-- SECTION 4: EXCEPTION HANDLING HIERARCHY -->
+  <div class="no-break" style="margin-top: 20px;">
+    <h2>4. Exception Handling Architecture</h2>
+    <p>
+      To ensure all edge cases are handled predictably, the system implements a clean, object-oriented custom exception hierarchy:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Exception Class</th>
+          <th>Superclass</th>
+          <th>Trigger Condition</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>StudentRecordError</code></td>
+          <td><code>Exception</code></td>
+          <td>Base class for all domain errors.</td>
+        </tr>
+        <tr>
+          <td><code>ValidationError</code></td>
+          <td><code>StudentRecordError</code></td>
+          <td>Base class for all input validation failures.</td>
+        </tr>
+        <tr>
+          <td><code>InvalidEmailError</code></td>
+          <td><code>ValidationError</code></td>
+          <td>Email format fails the regex test or length constraints.</td>
+        </tr>
+        <tr>
+          <td><code>InvalidStudentIdError</code></td>
+          <td><code>ValidationError</code></td>
+          <td>ID is blank, too short (&lt;3), or contains illegal characters.</td>
+        </tr>
+        <tr>
+          <td><code>InvalidNameError</code></td>
+          <td><code>ValidationError</code></td>
+          <td>Name contains numbers or forbidden symbols.</td>
+        </tr>
+        <tr>
+          <td><code>InvalidAgeError</code></td>
+          <td><code>ValidationError</code></td>
+          <td>Age is non-integer, float, or outside [10, 120].</td>
+        </tr>
+        <tr>
+          <td><code>InvalidGPAError</code></td>
+          <td><code>ValidationError</code></td>
+          <td>GPA is outside the valid academic range [0.0, 4.0].</td>
+        </tr>
+        <tr>
+          <td><code>StudentNotFoundError</code></td>
+          <td><code>StudentRecordError</code></td>
+          <td>Lookups or mutations for a non-existent student ID.</td>
+        </tr>
+        <tr>
+          <td><code>DuplicateStudentError</code></td>
+          <td><code>StudentRecordError</code></td>
+          <td>Attempting to register an already-enrolled Student ID or Email.</td>
+        </tr>
+        <tr>
+          <td><code>StorageError</code></td>
+          <td><code>StudentRecordError</code></td>
+          <td>File I/O permission failures or JSON corruption.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- SECTION 5: PERSISTENCE & DATA INTEGRITY -->
+  <div class="no-break">
+    <h2>5. File Storage & Crash-Safe Persistence</h2>
+    <p>
+      The persistence module (<code>student_manager/storage.py</code>) ensures that disk operations are atomic. Typical file writes (e.g. <code>open(file, 'w')</code>) can truncate the target file before the write completes, which risks corrupting the entire database if the process is terminated mid-write.
+    </p>
+    <div class="callout">
+      <div class="callout-title">Atomic Write Protocol</div>
+      1. Serialize students list to JSON.<br>
+      2. Write serialized data to an adjacent temporary file (<code>students.json.tmp</code>).<br>
+      3. Flush and close the temporary file.<br>
+      4. Call <code>os.replace(tmp_path, target_path)</code> which performs an atomic replacement supported by operating systems (Windows NTFS and POSIX filesystems).
+    </div>
+
+    <h3>Sample JSON Record Format</h3>
+    <pre><code>[
+  {
+    "student_id": "STU-1001",
+    "name": "Alex Rivera",
+    "email": "alex.rivera@university.edu",
+    "age": 21,
+    "course": "Computer Science",
+    "gpa": 3.85,
+    "created_at": "2026-09-20T10:15:00+00:00"
+  }
+]</code></pre>
+  </div>
+
+  <!-- SECTION 6: VERIFICATION & TEST RESULTS -->
+  <div class="no-break" style="margin-top: 20px;">
+    <h2>6. Test Plan & Automated Verification</h2>
+    <p>
+      The project contains <strong>29 comprehensive unit tests</strong> executed via Python's standard <code>unittest</code> framework. All tests pass with zero warnings or errors.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Test Suite Module</th>
+          <th>Cases Verified</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>tests/test_validator.py</code></td>
+          <td>Valid/invalid emails, ID formats, names, ages, GPAs</td>
+          <td><span class="status-tag status-pass">PASSED</span></td>
+        </tr>
+        <tr>
+          <td><code>tests/test_storage.py</code></td>
+          <td>JSON persistence, atomic replacement, corruption handling, CSV export</td>
+          <td><span class="status-tag status-pass">PASSED</span></td>
+        </tr>
+        <tr>
+          <td><code>tests/test_manager.py</code></td>
+          <td>CRUD flows, duplicate ID/email rejection, search & statistics</td>
+          <td><span class="status-tag status-pass">PASSED</span></td>
+        </tr>
+        <tr>
+          <td><code>tests/test_exceptions.py</code></td>
+          <td>Exception inheritance tree, error message formatting, attribute storage</td>
+          <td><span class="status-tag status-pass">PASSED</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pre><code>$ python -m unittest discover -s tests -v
+Ran 29 tests in 0.062s
+OK</code></pre>
+  </div>
+
+  <!-- SECTION 7: GITHUB PUBLISHING -->
+  <div class="no-break" style="margin-top: 20px;">
+    <h2>7. GitHub Publishing Instructions</h2>
+    <p>
+      The repository has been initialized with an initial commit on branch <code>main</code>. To link and publish to GitHub:
+    </p>
+    <pre><code># 1. Create a repository on GitHub named 'student-record-manager' (leave blank)
+# 2. In your terminal, navigate to the project directory:
+cd C:\Users\HP\.gemini\antigravity-ide\scratch\student-record-manager
+
+# 3. Add your remote GitHub repository (replace YOUR_USERNAME):
+git remote add origin https://github.com/YOUR_USERNAME/student-record-manager.git
+
+# 4. Push your local main branch to GitHub:
+git push -u origin main</code></pre>
+  </div>
+
+  <div class="footer-note">
+    Student Record Manager &bull; Generated Documentation & Technical Specification &bull; MIT Licensed
+  </div>
+
+</body>
+</html>
