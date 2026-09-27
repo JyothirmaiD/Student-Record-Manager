@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Record Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg-dark: #0f172a;
+      --surface: #1e293b;
+      --surface-light: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --danger: #ef4444;
+      --border: #334155;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #60a5fa, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 25px;
+    }
+
+    @media (max-width: 860px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    .card h2 {
+      font-size: 1.25rem;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      background: #090d16;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    }
+
+    .error-msg {
+      font-size: 0.78rem;
+      color: var(--danger);
+      margin-top: 4px;
+      display: none;
+    }
+
+    .btn {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--surface-light);
+      margin-top: 10px;
+    }
+
+    .btn-secondary:hover {
+      background: #475569;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .stats {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background: #151e2e;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr {
+      border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+    }
+
+    tr:last-child {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(37, 99, 235, 0.2);
+      color: #93c5fd;
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: var(--danger);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .btn-delete:hover {
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    .alert {
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .alert-success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #6ee7b7;
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🎓 Student Record Manager</h1>
+    <p>Interactive Web Dashboard with Regex Email Validation & Persistent Storage</p>
+  </header>
+
+  <div class="grid">
+    <!-- Form Card -->
+    <div class="card">
+      <h2><span>➕</span> Add Student</h2>
+
+      <div id="alertBox" class="alert"></div>
+
+      <form id="studentForm">
+        <div class="form-group">
+          <label for="studentId">Student ID</label>
+          <input type="text" id="studentId" placeholder="e.g. STU101" required>
+        </div>
+
+        <div class="form-group">
+          <label for="studentName">Full Name</label>
+          <input type="text" id="studentName" placeholder="e.g. Alice Johnson" required>
+        </div>
+
+        <div class="form-group">
+          <label for="studentEmail">Email (Validated via Regex)</label>
+          <input type="text" id="studentEmail" placeholder="e.g. alice@university.edu" required>
+          <div id="emailError" class="error-msg">Invalid email format! Expected: name@domain.com</div>
+        </div>
+
+        <div class="form-group">
+          <label for="studentCourse">Course / Major</label>
+          <input type="text" id="studentCourse" placeholder="e.g. Computer Science" required>
+        </div>
+
+        <div class="form-group">
+          <label for="studentGpa">GPA (0.00 - 4.00)</label>
+          <input type="number" id="studentGpa" step="0.01" min="0" max="4" placeholder="3.85" required>
+        </div>
+
+        <button type="submit" class="btn">Add Student Record</button>
+        <button type="button" id="exportBtn" class="btn btn-secondary">💾 Save & Export JSON</button>
+      </form>
+    </div>
+
+    <!-- Table Card -->
+    <div class="card">
+      <h2><span>📋</span> Student Registry</h2>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="🔍 Search by ID, Name, Course, Email...">
+        </div>
+        <div class="stats" id="studentCount">Total: 0 students</div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Course</th>
+              <th>GPA</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="studentTableBody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Initial Student Dataset
+  let students = [
+    { student_id: "STU101", name: "Alice Johnson", email: "alice.johnson@university.edu", course: "Computer Science", gpa: 3.85 },
+    { student_id: "STU102", name: "Bob Smith", email: "bob.smith@techcollege.org", course: "Data Science", gpa: 3.65 },
+    { student_id: "STU103", name: "Clara Davis", email: "clara.davis@institute.ac.uk", course: "Cybersecurity", gpa: 3.92 },
+    { student_id: "STU104", name: "Diana Prince", email: "diana.prince@wayne.edu", course: "Software Engineering", gpa: 3.95 },
+    { student_id: "STU105", name: "Evan Wright", email: "evan.wright@stanford.edu", course: "Artificial Intelligence", gpa: 3.78 }
+  ];
+
+  // Load from localStorage if present
+  const saved = localStorage.getItem("students_data");
+  if (saved) {
+    try {
+      students = JSON.parse(saved);
+    } catch(e) {}
+  }
+
+  // Regex validation pattern matching RFC 5322
+  const EMAIL_REGEX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
+  const form = document.getElementById("studentForm");
+  const emailInput = document.getElementById("studentEmail");
+  const emailError = document.getElementById("emailError");
+  const alertBox = document.getElementById("alertBox");
+  const tableBody = document.getElementById("studentTableBody");
+  const countDisplay = document.getElementById("studentCount");
+  const searchInput = document.getElementById("searchInput");
+  const exportBtn = document.getElementById("exportBtn");
+
+  function showAlert(msg, isSuccess = true) {
+    alertBox.textContent = msg;
+    alertBox.className = "alert " + (isSuccess ? "alert-success" : "alert-error");
+    alertBox.style.display = "block";
+    setTimeout(() => { alertBox.style.display = "none"; }, 4000);
+  }
+
+  function renderTable(list = students) {
+    tableBody.innerHTML = "";
+    if (list.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">No student records found.</td></tr>`;
+      countDisplay.textContent = "Total: 0 students";
+      return;
+    }
+
+    list.forEach(s => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><span class="badge">${s.student_id}</span></td>
+        <td><strong>${s.name}</strong></td>
+        <td>${s.email}</td>
+        <td>${s.course}</td>
+        <td>${parseFloat(s.gpa).toFixed(2)}</td>
+        <td><button class="btn-delete" onclick="deleteStudent('${s.student_id}')">Delete</button></td>
+      `;
+      tableBody.appendChild(tr);
+    });
+
+    countDisplay.textContent = `Total: ${list.length} student${list.length !== 1 ? 's' : ''}`;
+  }
+
+  function saveToStorage() {
+    localStorage.setItem("students_data", JSON.stringify(students));
+  }
+
+  // Live Regex feedback on typing
+  emailInput.addEventListener("input", () => {
+    const val = emailInput.value.trim();
+    if (val && !EMAIL_REGEX.test(val)) {
+      emailError.style.display = "block";
+    } else {
+      emailError.style.display = "none";
+    }
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const id = document.getElementById("studentId").value.trim().toUpperCase();
+    const name = document.getElementById("studentName").value.trim();
+    const email = emailInput.value.trim().toLowerCase();
+    const course = document.getElementById("studentCourse").value.trim();
+    const gpa = parseFloat(document.getElementById("studentGpa").value);
+
+    // 1. Validate Email with Regex
+    if (!EMAIL_REGEX.test(email)) {
+      emailError.style.display = "block";
+      showAlert("Invalid Email Error: Email does not match regex pattern!", false);
+      return;
+    }
+
+    // 2. Check for Duplicate Student ID
+    if (students.some(s => s.student_id === id)) {
+      showAlert(`Duplicate Student Error: ID '${id}' already exists!`, false);
+      return;
+    }
+
+    // Add student
+    const newStudent = { student_id: id, name, email, course, gpa };
+    students.push(newStudent);
+    saveToStorage();
+    renderTable();
+    form.reset();
+    showAlert(`Successfully added ${name} (${id})!`, true);
+  });
+
+  window.deleteStudent = function(id) {
+    if (confirm(`Are you sure you want to delete student ${id}?`)) {
+      students = students.filter(s => s.student_id !== id);
+      saveToStorage();
+      renderTable();
+      showAlert(`Student ${id} removed.`, true);
+    }
+  };
+
+  searchInput.addEventListener("input", (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    const filtered = students.filter(s =>
+      s.student_id.toLowerCase().includes(q) ||
+      s.name.toLowerCase().includes(q) ||
+      s.email.toLowerCase().includes(q) ||
+      s.course.toLowerCase().includes(q)
+    );
+    renderTable(filtered);
+  });
+
+  exportBtn.addEventListener("click", () => {
+    const jsonStr = JSON.stringify(students, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "students.json";
+    a.click();
+    URL.revokeObjectURL(url);
+    showAlert("Downloaded students.json file!", true);
+  });
+
+  // Initial render
+  renderTable();
+</script>
+</body>
+</html>
