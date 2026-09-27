@@ -19,5 +19,12 @@
         "email": "clara.davis@institute.ac.uk",
         "course": "Cybersecurity",
         "gpa": 3.92
+    },
+    {
+        "student_id": "STU104",
+        "name": "Diana Prince",
+        "email": "diana.prince@wayne.edu",
+        "course": "Software Engineering",
+        "gpa": 3.95
     }
 ]
