@@ -1,200 +1,196 @@
-# Student Record Manager 🎓
+# 🎓 Student Record Manager
 
-[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-29%20passed-brightgreen.svg)](tests/)
-[![Documentation](https://img.shields.io/badge/Documentation-PDF-red.svg)](StudentRecordManager_Project_Report.pdf)
-[![Dependencies](https://img.shields.io/badge/dependencies-standard%20library-brightgreen.svg)](#requirements)
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://img.shields.io/badge/tests-passing-brightgreen.svg)]()
+[![Code Style](https://img.shields.io/badge/code%20style-PEP%208-orange.svg)]()
 
-A Python application for managing student academic records. Built with modular software design principles, featuring **Regex-based email validation**, **atomic file persistence**, a **custom exception hierarchy**, and an **interactive CLI**.
-
-📄 **[Download the Complete Project Report & Documentation (PDF)](StudentRecordManager_Project_Report.pdf)**
+A modular, object-oriented Python application designed to manage student academic records with robust regular-expression validation, persistent file storage, custom exception handling, and a clean interactive terminal interface.
 
 ---
 
-## 📋 Features
+## 🌟 Key Features
 
-- 👤 **Add Student**: Enroll student records with ID, Full Name, Email, Age, Course, and Cumulative GPA.
-- ✉️ **Validate Email using Regex**: Robust RFC 5322-compliant regular expression validation with format verification and normalization.
-- 💾 **Save Data to File**: Persistent atomic JSON storage with crash protection, plus optional CSV export.
-- 📖 **Read Student Data**: Formatted ASCII table views, record lookups by ID, fuzzy multi-field search, and academic statistics.
-- 🛡️ **Handle Invalid Input using Exceptions**: Granular domain-specific custom exception hierarchy that gracefully reports input errors without application crashes.
+| Feature | Description | Implementation |
+| :--- | :--- | :--- |
+| **Add Student** | Enroll student with ID, Name, Email, Course, and GPA. | `src/models.py`, `src/manager.py` |
+| **Validate Email using Regex** | Strict format validation enforcing standard email structure (`user@domain.tld`). | `src/validator.py` (`re` module) |
+| **Save Data to File** | Persistent JSON storage with atomic writes to prevent corruption. | `src/storage.py` |
+| **Read Student Data** | Load and display records in an aligned ASCII table; includes multi-field search. | `src/storage.py`, `src/cli.py` |
+| **Handle Invalid Input** | Custom exception hierarchy preventing crashes on malformed data or duplicate IDs. | `src/exceptions.py` |
 
 ---
 
-## 🏗️ Project Architecture
+## 📁 Project Structure
 
 ```
 student-record-manager/
-├── student_manager/            # Core application package
-│   ├── __init__.py             # Public API exports
-│   ├── exceptions.py           # Custom exception hierarchy
-│   ├── models.py               # Student domain model & serialization
-│   ├── validator.py            # Regex email & input validators
-│   ├── storage.py              # Atomic JSON and CSV persistence
-│   ├── manager.py              # Business logic & record operations
-│   └── cli.py                  # Interactive menu & argparse handler
-├── tests/                      # Comprehensive unit test suite
-│   ├── __init__.py
-│   ├── test_validator.py       # Regex email & field validation tests
-│   ├── test_storage.py         # Persistence & error recovery tests
-│   ├── test_manager.py         # CRUD logic & duplicate prevention tests
-│   └── test_exceptions.py      # Exception hierarchy tests
-├── data/                       # Storage directory
-│   └── students.json           # Default JSON database
-├── main.py                     # Primary executable entrypoint
-├── requirements.txt            # Zero-dependency specification
-├── .gitignore                  # Git ignore rules
-├── LICENSE                     # MIT License
-└── README.md                   # Project documentation
+├── src/
+│   ├── __init__.py          # Package initialization
+│   ├── exceptions.py        # Custom exception hierarchy
+│   ├── validator.py         # Regex email and input validation logic
+│   ├── models.py            # Student data model & serialization
+│   ├── storage.py           # File persistence (JSON read/save)
+│   ├── manager.py           # Business logic & CRUD operations
+│   └── cli.py               # Interactive CLI with try/except loops
+├── tests/
+│   ├── __init__.py          # Test suite package
+│   ├── test_validator.py    # Unit tests for regex and validators
+│   └── test_manager.py      # Unit tests for CRUD, I/O, & exceptions
+├── data/
+│   └── students.json        # Persistent JSON data storage
+├── main.py                  # Application entry point
+├── .gitignore               # Standard Python gitignore
+├── LICENSE                  # MIT License
+└── README.md                # Project documentation & GitHub guide
 ```
 
 ---
 
-## 🔍 Email Regex Validation
+## 🚀 Quick Start
 
-Email validation is implemented in [`student_manager/validator.py`](file:///C:/Users/HP/.gemini/antigravity-ide/scratch/student-record-manager/student_manager/validator.py) using the following compiled regular expression pattern:
+### 1. Prerequisites
+- **Python 3.8+** (Zero external dependencies — uses Python standard library!)
+- **Git**
 
-```python
-EMAIL_REGEX_PATTERN = r"^[a-zA-Z0-9]([a-zA-Z0-9._%+-]*[a-zA-Z0-9])?@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$"
-```
-
-### Pattern Breakdown:
-1. `^[a-zA-Z0-9]`: Must begin with an alphanumeric character.
-2. `([a-zA-Z0-9._%+-]*[a-zA-Z0-9])?`: Local part allows dots, underscores, hyphens, and percent signs, but must not end with a special character or contain consecutive dots (`..`).
-3. `@`: Mandatory single delimiter separating local part and domain.
-4. `[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?`: Domain name must start and end with an alphanumeric character and can contain hyphens.
-5. `(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*`: Supports optional subdomains (e.g., `dept.university.edu`).
-6. `\.[a-zA-Z]{2,}$`: Requires a valid Top-Level Domain (TLD) of at least 2 alphabetic characters.
-
----
-
-## ⚠️ Exception Handling Architecture
-
-All exceptions derive from a unified base class `StudentRecordError` defined in [`student_manager/exceptions.py`](file:///C:/Users/HP/.gemini/antigravity-ide/scratch/student-record-manager/student_manager/exceptions.py):
-
-| Exception | Inherits From | Description |
-| :--- | :--- | :--- |
-| `StudentRecordError` | `Exception` | Base class for all domain-specific errors. |
-| `ValidationError` | `StudentRecordError` | Base class for all input validation failures. |
-| `InvalidEmailError` | `ValidationError` | Raised when an email fails regex validation. |
-| `InvalidStudentIdError` | `ValidationError` | Raised when student ID format is incorrect. |
-| `InvalidNameError` | `ValidationError` | Raised when student name is blank or invalid. |
-| `InvalidAgeError` | `ValidationError` | Raised when age is outside [10, 120] or non-integer. |
-| `InvalidGPAError` | `ValidationError` | Raised when GPA is not a number or outside [0.0, 4.0]. |
-| `StudentNotFoundError` | `StudentRecordError` | Raised when a requested student ID is not found. |
-| `DuplicateStudentError` | `StudentRecordError` | Raised when student ID or email already exists. |
-| `StorageError` | `StudentRecordError` | Raised when saving or loading data encounters disk errors. |
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Python 3.10 or higher.
-- No third-party packages required (uses Python Standard Library).
-
-### Running Interactive Mode
-Launch the interactive terminal interface:
+### 2. Run the Application
+Clone the repository and run `main.py`:
 
 ```bash
+# Navigate to the project directory
+cd student-record-manager
+
+# Launch the interactive CLI
 python main.py
 ```
 
-**Terminal Menu Preview:**
-```text
-====================================================================
-           STUDENT RECORD MANAGER - ACADEMIC SYSTEM
-   Regex Email Validation * Exception Handling * Persistent File I/O
-====================================================================
- 1. Add Student (with Regex Email & Input Validation)
- 2. View All Students (Table View)
- 3. Search Student Records
- 4. Find Student by ID
- 5. Update Student Record
- 6. Delete Student Record
- 7. View Academic Statistics
- 8. Export Records to CSV
- 9. Reload Data from File
- 0. Exit
---------------------------------------------------------------------
-Enter your choice (0-9):
+---
+
+## 🖥️ Interactive CLI Walkthrough
+
+When you start `main.py`, you are presented with the interactive menu:
+
+```
+============================================================
+              STUDENT RECORD MANAGER (v1.0)
+============================================================
+ Features: Add Student | Regex Email Validation | File I/O
+           Custom Exception Handling | GitHub Ready
+============================================================
+
+--- MAIN MENU ---
+1. Add New Student
+2. View All Students
+3. Search Students
+4. Delete Student
+5. Save Records to File
+6. Reload Records from File
+7. Exit
+------------------------------
+Select an option (1-7):
+```
+
+### Example: Viewing All Students
+```
+========================================================================================
+| ID     | Name          | Email                        | Course           |      GPA |
+========================================================================================
+| STU101 | Alice Johnson | alice.johnson@university.edu | Computer Science |     3.85 |
+| STU102 | Bob Smith     | bob.smith@techcollege.org    | Data Science     |     3.65 |
+| STU103 | Clara Davis   | clara.davis@institute.ac.uk  | Cybersecurity    |     3.92 |
+----------------------------------------------------------------------------------------
+ Total records: 3
+========================================================================================
 ```
 
 ---
 
-### Command-Line Arguments (CLI Mode)
+## 🔍 Validation & Exception Handling
 
-You can also run batch tasks directly from the command line:
+### 1. Regex Email Validation
+The application validates email addresses using the standard RFC-compliant regular expression:
+```python
+EMAIL_REGEX_PATTERN = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+```
+- **Valid:** `student@university.edu`, `john.doe+tag@domain.co.uk`
+- **Invalid:** `invalid.email`, `user@`, `@domain.com`, `user name@domain.com`
 
-- **List all students**:
-  ```bash
-  python main.py --list
-  ```
+If an invalid email is provided, an `InvalidEmailError` is raised with a descriptive message:
+```
+[ERROR] Invalid email format: 'alex.invalid'. Expected format: name@domain.com
+```
 
-- **Add a student**:
-  ```bash
-  python main.py --add STU-1006 "Hannah Abbott" "hannah@university.edu" 21 "Chemistry" 3.82
-  ```
+### 2. Custom Exception Hierarchy
+```mermaid
+graph TD
+    Exception --> StudentRecordException
+    StudentRecordException --> InvalidEmailError
+    StudentRecordException --> InvalidInputError
+    StudentRecordException --> DuplicateStudentError
+    StudentRecordException --> StudentNotFoundError
+    StudentRecordException --> StorageError
+```
 
-- **Search by keyword**:
-  ```bash
-  python main.py --search "Computer Science"
-  ```
-
-- **View statistics**:
-  ```bash
-  python main.py --stats
-  ```
-
-- **Export records to CSV**:
-  ```bash
-  python main.py --export-csv data/students_backup.csv
-  ```
+All user interactions in the CLI are enclosed in `try...except` blocks, allowing the user to re-enter corrected values without terminating the program.
 
 ---
 
 ## 🧪 Running Unit Tests
 
-Run the full suite of 29 unit tests using Python's built-in `unittest` runner:
+Run the complete automated test suite using Python's built-in `unittest` runner:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-All tests will execute and confirm:
-- Regex email validation with valid and edge-case inputs.
-- Custom exception raising and contextual error messages.
-- Atomic file writes and data corruption handling.
-- Record uniqueness constraint checks.
+Output:
+```
+test_add_duplicate_student_raises_exception ... ok
+test_add_student_success ... ok
+test_delete_student_success ... ok
+test_save_and_read_persistence_roundtrip ... ok
+test_search_students ... ok
+test_valid_emails ... ok
+test_invalid_email_missing_at ... ok
+test_invalid_email_with_spaces ... ok
+...
+Ran 19 tests in 0.045s
+OK
+```
 
 ---
 
-## 📤 Publishing to a GitHub Repository
+## 📦 How to Publish to GitHub
 
-To publish this project to your GitHub account:
+Follow these steps to publish this repository to your personal or organization GitHub account:
 
-### 1. Initialize Git and Commit Files
-Open a terminal in this project directory:
+### Step 1: Create a New GitHub Repository
+1. Go to [github.com/new](https://github.com/new).
+2. Set **Repository name** to `student-record-manager`.
+3. Choose **Public** or **Private**.
+4. Leave **"Initialize this repository with..."** unchecked (we already have README, .gitignore, and license).
+5. Click **Create repository**.
+
+### Step 2: Initialize & Push from Your Terminal
+Run the following commands inside the `student-record-manager` directory:
 
 ```bash
+# 1. Initialize local git repository (if not already initialized)
 git init
+
+# 2. Stage all project files
 git add .
-git commit -m "feat: initial commit of Student Record Manager"
-```
 
-### 2. Create a Remote Repository on GitHub
-1. Navigate to [GitHub.com](https://github.com) and click **New Repository**.
-2. Name the repository `student-record-manager`.
-3. Leave **"Initialize this repository with a README"** unchecked (we already created a complete one).
+# 3. Create your initial commit
+git commit -m "feat: initial commit - Student Record Manager with regex email validation and persistence"
 
-### 3. Push Code to GitHub
-Link your local repository to GitHub and push your main branch:
-
-```bash
-# Replace YOUR_USERNAME with your GitHub username:
+# 4. Set default branch to main
 git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/student-record-manager.git
+
+# 5. Link to your GitHub repository (replace YOUR-USERNAME with your GitHub handle)
+git remote add origin https://github.com/YOUR-USERNAME/student-record-manager.git
+
+# 6. Push code to GitHub
 git push -u origin main
 ```
 

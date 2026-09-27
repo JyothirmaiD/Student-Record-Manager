@@ -20,27 +20,43 @@ parts/
 sdist/
 var/
 wheels/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 
 # Virtual environments
-venv/
-.venv/
+.env
+.venv
 env/
+venv/
 ENV/
+env.bak/
+venv.bak/
 
-# Temporary and local runtime files
-*.tmp
-*.log
-.DS_Store
-Thumbs.db
-
-# Testing and coverage
-.pytest_cache/
-.coverage
+# Unit test / coverage reports
 htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
 
-# IDE settings
-.vscode/
+# IDE & Editors
 .idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+*.tmp
+data/*.tmp

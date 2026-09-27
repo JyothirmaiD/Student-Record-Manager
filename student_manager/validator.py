@@ -11,6 +11,9 @@ from student_manager.exceptions import (
     InvalidNameError,
     InvalidAgeError,
     InvalidGPAError,
+    InvalidPhoneError,
+    InvalidAttendanceError,
+    InvalidStatusError,
 )
 
 # RFC 5322-compliant practical email regular expression:
@@ -26,6 +29,13 @@ STUDENT_ID_REGEX = re.compile(r"^[A-Za-z0-9_-]{3,20}$")
 
 # Name: Allows alphabets, spaces, apostrophes, hyphens, and periods (2 to 100 characters)
 NAME_REGEX = re.compile(r"^[A-Za-zÀ-ÖØ-öø-ÿ\s'\-\.]{2,100}$")
+
+# Phone Regex: International / national phone format with optional country code, parenthesized area code, spaces, hyphens, and dots
+PHONE_REGEX = re.compile(
+    r"^(?:\+?[0-9]{1,4}[-.\s]*)?(?:\([0-9]{1,6}\)[-.\s]*)?[0-9]{1,6}(?:[-.\s]?[0-9]{1,6})*$"
+)
+
+VALID_STATUSES = {"Active", "Graduated", "On Leave", "Probation"}
 
 
 def validate_email(email: str) -> str:
@@ -173,3 +183,114 @@ def validate_gpa(gpa_val: float | int | str) -> float:
         raise InvalidGPAError(gpa, "GPA must be between 0.0 and 4.0")
 
     return round(gpa, 2)
+
+
+def validate_phone(phone_val: str | None, optional: bool = True) -> str:
+    """Validate student phone number using Regex.
+
+    Args:
+        phone_val: Raw phone string (e.g., '+1-555-0199', '9876543210').
+        optional: If True, an empty string is accepted and returned as ''.
+
+    Returns:
+        The cleaned phone string.
+
+    Raises:
+        InvalidPhoneError: If phone is provided but does not match required format.
+    """
+    if phone_val is None or (isinstance(phone_val, str) and not phone_val.strip()):
+        if optional:
+            return ""
+        raise InvalidPhoneError("", "Phone number cannot be empty")
+
+    cleaned = str(phone_val).strip()
+    # Strip any formatting characters to count raw digits
+    digits_only = re.sub(r"\D", "", cleaned)
+    if len(digits_only) < 7 or len(digits_only) > 15:
+        raise InvalidPhoneError(cleaned, "Phone number must contain between 7 and 15 digits")
+
+    if not PHONE_REGEX.match(cleaned):
+        raise InvalidPhoneError(
+            cleaned,
+            "Phone must follow standard formats (e.g., +1-555-0199, (555) 123-4567, or 9876543210)",
+        )
+
+    return cleaned
+
+
+def validate_attendance(attendance_val: float | int | str) -> float:
+    """Validate student attendance percentage.
+
+    Args:
+        attendance_val: Percentage value (0.0 to 100.0).
+
+    Returns:
+        Validated float attendance rounded to 1 decimal place.
+
+    Raises:
+        InvalidAttendanceError: If value is not a number or outside [0.0, 100.0].
+    """
+    try:
+        att = float(attendance_val)
+    except (ValueError, TypeError):
+        raise InvalidAttendanceError(attendance_val, "Attendance must be a valid numeric percentage")
+
+    if att < 0.0 or att > 100.0:
+        raise InvalidAttendanceError(att, "Attendance percentage must be between 0.0% and 100.0%")
+
+    return round(att, 1)
+
+
+def validate_status(status_val: str) -> str:
+    """Validate student enrollment status.
+
+    Args:
+        status_val: Status string.
+
+    Returns:
+        Canonical status string (e.g. 'Active').
+
+    Raises:
+        InvalidStatusError: If status is not in VALID_STATUSES.
+    """
+    if not isinstance(status_val, str):
+        raise InvalidStatusError(str(status_val), "Status must be a string")
+
+    cleaned = status_val.strip().title()
+    # Normalizing variations like 'On-leave' -> 'On Leave'
+    if cleaned.lower() in ("on-leave", "on leave", "leave"):
+        cleaned = "On Leave"
+
+    if cleaned not in VALID_STATUSES:
+        raise InvalidStatusError(
+            status_val,
+            f"Status must be one of: {', '.join(sorted(VALID_STATUSES))}",
+        )
+    return cleaned
+
+
+def calculate_grade_letter(gpa: float) -> str:
+    """Determine letter grade from GPA.
+
+    Scale:
+        >= 3.85: A+
+        >= 3.50: A
+        >= 3.00: B+
+        >= 2.50: B
+        >= 2.00: C
+        >= 1.00: D
+        <  1.00: F
+    """
+    if gpa >= 3.85:
+        return "A+"
+    if gpa >= 3.50:
+        return "A"
+    if gpa >= 3.00:
+        return "B+"
+    if gpa >= 2.50:
+        return "B"
+    if gpa >= 2.00:
+        return "C"
+    if gpa >= 1.00:
+        return "D"
+    return "F"

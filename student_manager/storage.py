@@ -98,15 +98,34 @@ class CsvStorageHandler(BaseStorageHandler):
         self.file_path = Path(file_path)
 
     def save(self, students: list[Student]) -> None:
-        """Export student records to CSV format."""
+        """Export student records to CSV format with all extra fields."""
         try:
             self.file_path.parent.mkdir(parents=True, exist_ok=True)
-            fieldnames = ["student_id", "name", "email", "age", "course", "gpa", "created_at"]
+            fieldnames = [
+                "student_id",
+                "name",
+                "email",
+                "age",
+                "course",
+                "gpa",
+                "grade_letter",
+                "status",
+                "attendance",
+                "phone",
+                "gender",
+                "semester",
+                "emergency_contact",
+                "city",
+                "tags",
+                "created_at",
+            ]
             with open(self.file_path, "w", newline="", encoding="utf-8") as f:
-                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
                 writer.writeheader()
                 for s in students:
-                    writer.writerow(s.to_dict())
+                    row = s.to_dict()
+                    row["tags"] = "; ".join(s.tags) if s.tags else ""
+                    writer.writerow(row)
         except OSError as e:
             raise StorageError("save (CSV)", str(self.file_path), e) from e
 
@@ -120,7 +139,10 @@ class CsvStorageHandler(BaseStorageHandler):
             with open(self.file_path, "r", newline="", encoding="utf-8") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
-                    students.append(Student.from_dict(row))
+                    data = dict(row)
+                    if "tags" in data and isinstance(data["tags"], str):
+                        data["tags"] = [t.strip() for t in data["tags"].split(";") if t.strip()]
+                    students.append(Student.from_dict(data))
             return students
         except Exception as e:
             raise StorageError("load (CSV)", str(self.file_path), e) from e

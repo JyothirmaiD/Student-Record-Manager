@@ -1,1 +1,1 @@
-"""Test suite for Student Record Manager."""
+"""Unit tests for Student Record Manager."""

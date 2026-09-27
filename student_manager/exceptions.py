@@ -74,6 +74,36 @@ class InvalidGPAError(ValidationError):
         self.reason = reason
 
 
+class InvalidPhoneError(ValidationError):
+    """Raised when a phone number fails regex or format checks."""
+
+    def __init__(self, phone: str, reason: str = "Invalid phone number format") -> None:
+        message = f"Phone validation failed for '{phone}': {reason}"
+        super().__init__(message, details={"phone": phone, "reason": reason})
+        self.phone = phone
+        self.reason = reason
+
+
+class InvalidAttendanceError(ValidationError):
+    """Raised when attendance percentage is outside [0.0, 100.0]."""
+
+    def __init__(self, attendance: object, reason: str = "Attendance must be between 0.0% and 100.0%") -> None:
+        message = f"Attendance validation failed for '{attendance}': {reason}"
+        super().__init__(message, details={"attendance": str(attendance), "reason": reason})
+        self.attendance = attendance
+        self.reason = reason
+
+
+class InvalidStatusError(ValidationError):
+    """Raised when student enrollment status is unrecognized."""
+
+    def __init__(self, status: str, reason: str = "Status must be Active, Graduated, On Leave, or Probation") -> None:
+        message = f"Status validation failed for '{status}': {reason}"
+        super().__init__(message, details={"status": status, "reason": reason})
+        self.status = status
+        self.reason = reason
+
+
 class StudentNotFoundError(StudentRecordError):
     """Raised when a student cannot be found by ID or query criteria."""
 
