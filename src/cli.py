@@ -153,8 +153,9 @@ class StudentRecordCLI:
                 gpa=gpa,
             )
             self.manager.add_student(student)
-            self.has_unsaved_changes = True
-            print(f"\n[OK] Successfully added student: {student}")
+            self.manager.save_to_file()
+            self.has_unsaved_changes = False
+            print(f"\n[OK] Successfully added and saved student: {student}")
         except StudentRecordException as e:
             print(f"\n[ERROR] Failed to add student: {e}")
 
@@ -180,8 +181,9 @@ class StudentRecordCLI:
             confirm = input(f"Are you sure you want to delete {student.name} ({student.student_id})? [y/N]: ").strip().lower()
             if confirm in ("y", "yes"):
                 self.manager.delete_student(student_id)
-                self.has_unsaved_changes = True
-                print(f"[OK] Student {student_id} successfully deleted.")
+                self.manager.save_to_file()
+                self.has_unsaved_changes = False
+                print(f"[OK] Student {student_id} successfully deleted and file updated.")
             else:
                 print("[-] Deletion aborted.")
         except StudentNotFoundError as e:

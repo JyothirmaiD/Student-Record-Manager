@@ -222,6 +222,7 @@ class StudentManagerGUI:
         try:
             student = Student.create(student_id=s_id, name=name, email=email, course=course, gpa=gpa)
             self.manager.add_student(student)
+            self.manager.save_to_file()
             self.populate_table(self.manager.get_all_students())
 
             # Clear inputs
@@ -231,7 +232,7 @@ class StudentManagerGUI:
             self.course_entry.delete(0, tk.END)
             self.gpa_entry.delete(0, tk.END)
 
-            messagebox.showinfo("Success", f"Student {student.name} ({student.student_id}) added successfully!")
+            messagebox.showinfo("Success", f"Student {student.name} ({student.student_id}) added and saved to file successfully!")
         except InvalidEmailError as e:
             messagebox.showerror("Invalid Email (Regex Validation)", str(e))
         except InvalidInputError as e:
@@ -254,8 +255,9 @@ class StudentManagerGUI:
         if messagebox.askyesno("Confirm Deletion", f"Are you sure you want to delete {student_name} ({student_id})?"):
             try:
                 self.manager.delete_student(student_id)
+                self.manager.save_to_file()
                 self.populate_table(self.manager.get_all_students())
-                messagebox.showinfo("Deleted", f"Student {student_id} removed.")
+                messagebox.showinfo("Deleted", f"Student {student_id} removed and file updated.")
             except StudentNotFoundError as e:
                 messagebox.showerror("Error", str(e))
 
